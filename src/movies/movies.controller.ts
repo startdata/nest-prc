@@ -1,4 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/Movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -17,25 +19,23 @@ search(@Query('year') searchingYear: string){
     }
     
     @Get(':id') //여기있는 id와 @param에 있는 id는 이름이 같아야하고 id:~~~는 이름이 같지 않아도된다.
-    getOne(@Param('id') movieId: string): Movie{ //:Movie는 반환타입 Movie를 반환할거야
+    getOne(@Param('id') movieId: number): Movie{ //:Movie는 반환타입 Movie를 반환할거야
         // return `this will return one movies with the id: ${movieId}`; // movieId와 같아야한다.
+        console.log(typeof movieId);
         return this.moviesService.getOne(movieId);
     }
 
     @Post()
-    create(@Body() movieData){
+    create(@Body() movieData: CreateMovieDto){
         return this.moviesService.create(movieData);
     }
     @Delete("/:id")
-    remove(@Param('id') movieId: string){
+    remove(@Param('id') movieId: number){
         return this.moviesService.deleteOne(movieId);
     }
     @Patch('/:id')
-    patch(@Param('id') movieId: string, @Body() updateData){
-        return {
-            updatedMovie: movieId,
-            ...updateData,
-        }
+    patch(@Param('id') movieId: number, @Body() updateData: UpdateMovieDto){
+        return this.moviesService.update(movieId, updateData);
     }
     
 }
