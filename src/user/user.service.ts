@@ -14,7 +14,6 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     const data = await this.userRepository.create(createUserDto);
-
     return await this.userRepository.save(data);
   }
 
@@ -26,7 +25,7 @@ export class UserService {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .where('user.firstName = :name', { name: 'Timber' })
-      .getOne();
+      .getMany();
     return user;
   }
 
