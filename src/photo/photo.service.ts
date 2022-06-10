@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { PhotoRepository } from './repository/photo.repository';
+import { getManager } from 'typeorm';
 
 @Injectable()
 export class PhotoService {
@@ -29,5 +30,12 @@ export class PhotoService {
 
   remove(id: number) {
     return `This action removes a #${id} photo`;
+  }
+
+  async find() {
+    const entityManager = getManager();
+    const [data] = await entityManager.query(`
+    select * from Photo `);
+    return [data];
   }
 }
